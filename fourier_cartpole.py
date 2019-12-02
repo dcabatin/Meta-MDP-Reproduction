@@ -177,7 +177,7 @@ def main():
     T = 500        # episodes per inner agent
     max_itrs = 2000 # max iterations for inner agent per trial on CartPole
 
-    advisor_learning_rate = 1e-1
+    advisor_learning_rate = 1e-2
     exploiter_learning_rate = 1e-2
     gamma = 0.99
     if sys.argv[1] == 'advisor':
