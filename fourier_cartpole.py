@@ -127,7 +127,7 @@ def train(advisor,
         print(time.time() - start)
         eps = 0.8 / 0.995
 
-        env = randomize_environment(env)
+        env = randomize_environment(gym.make('CartPole-v1'))
         exploiter = REINFORCE(order=3)
         exploiter_optimizer = optim.Adam(exploiter.parameters(),
                                          lr=exploiter_learning_rate)
