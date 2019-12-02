@@ -26,14 +26,11 @@ def set_environmental_variables(env, length = 0.5, masspole = 0.5, \
     env.force_mag = force_mag
 
 def randomize_environment(env, lower = 0.5, upper = 2):
-    set_environmental_variables(env)
-    """
     set_environmental_variables(env,
                                 env.length * random_ratio(lower, upper),
                                 env.masspole * random_ratio(lower, upper),
                                 env.masscart * random_ratio(lower, upper),
                                 env.force_mag * random_ratio(lower, upper))
-                                """
     return env
 
 class REINFORCE(nn.Module):
@@ -141,9 +138,6 @@ def train(advisor,
 
         # training phase
         for i_episode in range(I):
-        #    if i_episode % 250 == 0:
-            #    print(time.time()-start)
-            #    print("--episode: " + str(i_episode) )
             eps *= 0.995
 
             state, curr_reward = env.reset(), 0
@@ -172,17 +166,13 @@ def train(advisor,
 
         reward_sums.append(reward_sum)
 
-       # if advisor_optimizer and meta_episode % 10 == 9:
-       #     torch.save(advisor, 'model_{}.pt'.format(meta_episode))
-
-
     if return_all:
         return reward_sums, all_returns
     else:
         return reward_sums
 
 def main():
-    Imeta = 350      # meta episodes
+    Imeta = 500      # meta episodes
     I = 1000         # episodes per meta episode
     T = 500        # episodes per inner agent
     max_itrs = 2000 # max iterations for inner agent per trial on CartPole
