@@ -33,12 +33,13 @@ def randomize_environment(env, lower = 0.5, upper = 2):
                                 env.force_mag * random_ratio(lower, upper))
     return env
 
+
+# REINFORCE class: implements an agent that uses REINFORCE with function approximation using a Fourier basis.
 class REINFORCE(nn.Module):
     def __init__(self, order=5, gamma = 0.99, num_actions = 2):
         super(REINFORCE, self).__init__()
         self.gamma = gamma
     
-        #self.fourier_weights = torch.randint(0, order, [4, order], dtype=torch.float)
         self.fourier_weights = nn.Linear(4, order)
         self.affine = nn.Linear(order, num_actions)
 
@@ -126,7 +127,6 @@ def train(advisor,
         print(time.time() - start)
         eps = 0.8 / 0.995
 
-        env.reset()
         env = randomize_environment(env)
         exploiter = REINFORCE(order=3)
         exploiter_optimizer = optim.Adam(exploiter.parameters(),
