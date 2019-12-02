@@ -26,14 +26,11 @@ def set_environmental_variables(env, length = 0.5, masspole = 0.5, \
     env.force_mag = force_mag
 
 def randomize_environment(env, lower = 1.0, upper = 1.0):
-    set_environmental_variables(env)
-    """
     set_environmental_variables(env,
                                 env.length * random_ratio(lower, upper),
                                 env.masspole * random_ratio(lower, upper),
                                 env.masscart * random_ratio(lower, upper),
                                 env.force_mag * random_ratio(lower, upper))
-    """
     return env
 
 class REINFORCE(nn.Module):
