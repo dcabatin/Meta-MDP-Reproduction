@@ -6,6 +6,14 @@ from itertools import count
 import random
 import sys
 
+plt.rc('font', size=12)          # controls default text sizes
+plt.rc('axes', titlesize=20)     # fontsize of the axes title
+plt.rc('axes', labelsize=14)    # fontsize of the x and y labels
+plt.rc('xtick', labelsize=12)    # fontsize of the tick labels
+plt.rc('ytick', labelsize=12)    # fontsize of the tick labels
+plt.rc('legend', fontsize=12)    # legend fontsize
+plt.rc('figure', titlesize=30)  # fontsize of the figure title
+
 
 def make_first_chart():
     rf0 = np.load('rf0.npy')
@@ -20,11 +28,11 @@ def make_first_chart():
     rand3 = np.load('rand3.npy')
     rand4 = np.load('rand4.npy')
 
-    rf0 = np.stack((rf0, rf1, rf2, rf3, rf4), axis=-1)
-    rf0 = np.mean(rf0, axis=1)
+    #rf0 = np.stack((rf0, rf1, rf2, rf3, rf4), axis=-1)
+    #rf0 = np.mean(rf0, axis=1)
 
-    rand0 = np.stack((rand0, rand1, rand2, rand3, rand4), axis=-1)
-    rand0 = np.mean(rand0, axis=1)
+    #rand0 = np.stack((rand0, rand1, rand2, rand3, rand4), axis=-1)
+    #rand0 = np.mean(rand0, axis=1)
 
     advisor_mean = np.mean(rf0.reshape(-1, 10), axis=1)
     random_mean = np.mean(rand0.reshape(-1, 10), axis=1)
@@ -49,8 +57,8 @@ def make_second_chart():
 
     num_rows = 50
 
-    rfall0 = np.stack((rfall0, rfall1, rfall2, rfall4), axis=-1)
-    rfall0 = np.mean(rfall0, axis=2)
+    #rfall0 = np.stack((rfall0, rfall1, rfall2, rfall4), axis=-1)
+    #rfall0 = np.mean(rfall0, axis=2)
     
 
     first = np.sum(rfall0[:num_rows], axis = 0) / num_rows
@@ -62,8 +70,8 @@ def make_second_chart():
     x_axis = [i*10 for i in range(len(fm))]
     plt.plot(x_axis, fm, marker='*')
     plt.plot(x_axis, lm, marker = '^')
-    plt.legend(['Iter: 0-50 R:{}'.format(np.sum(first)),
-                'Iter: 450-500 R:{}'.format(np.sum(last))], loc='upper left')
+    plt.legend(['Iter: 0-50 R:{}'.format(int(np.sum(first))), 
+                'Iter: 450-500 R:{}'.format(int(np.sum(last)))], loc='upper left')
     plt.xlabel('Exploitation Policy Training Episode')
     plt.ylabel('Average Return')
     plt.title('Progression of Learning Curves')
