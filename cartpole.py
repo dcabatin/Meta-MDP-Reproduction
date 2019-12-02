@@ -25,7 +25,7 @@ def set_environmental_variables(env, length = 0.5, masspole = 0.5, \
     env.masscart = masscart
     env.force_mag = force_mag
 
-def randomize_environment(env, lower = 1.0, upper = 1.0):
+def randomize_environment(env, lower = 0.9, upper = 1.0/0.9):
     set_environmental_variables(env,
                                 env.length * random_ratio(lower, upper),
                                 env.masspole * random_ratio(lower, upper),
@@ -39,7 +39,6 @@ class REINFORCE(nn.Module):
         self.gamma = gamma
 
         self.affine1 = nn.Linear(4, 12)
-       # self.dropout = nn.Dropout(p=0.1)
         self.affine2 = nn.Linear(12, num_actions)
 
         self.saved_log_probs = []
@@ -47,7 +46,6 @@ class REINFORCE(nn.Module):
 
     def forward(self, x):
         x = self.affine1(x)
-        #x = self.dropout(x)
         x = F.relu(x)
         action_scores = self.affine2(x)
         return F.softmax(action_scores, dim=1)
@@ -161,7 +159,7 @@ def train(advisor,
         return reward_sums
 
 def main():
-    Imeta = 150      # meta episodes
+    Imeta = 500      # meta episodes
     I = 1000         # episodes per meta episode
     T = 1000        # episodes per inner agent
     max_itrs = 2000 # max iterations for inner agent per trial on CartPole
@@ -173,7 +171,6 @@ def main():
         start_time = time.time()
 
         advisor = REINFORCE(gamma = gamma)
-        #advisor.cuda()
         advisor_optimizer = optim.Adam(advisor.parameters(), lr=advisor_learning_rate)
         advisor_returns_reinforce, \
         advisor_returns_reinforce_all = train(advisor,
@@ -247,5 +244,5 @@ def make_second_chart():
     plt.savefig('chart_two.png')
 
 if sys.argv[1] == 'plot':
+    make_first_chart()
     make_second_chart()
-    #make_first_chart()
