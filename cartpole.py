@@ -25,6 +25,7 @@ def set_environmental_variables(env, length = 0.5, masspole = 0.5, \
     env.masscart = masscart
     env.force_mag = force_mag
 
+# Change the parameters of the environment to be within a random range.
 def randomize_environment(env, lower = 0.9, upper = 1.0/0.9):
     set_environmental_variables(env,
                                 env.length * random_ratio(lower, upper),
@@ -33,6 +34,7 @@ def randomize_environment(env, lower = 0.9, upper = 1.0/0.9):
                                 env.force_mag * random_ratio(lower, upper))
     return env
 
+# REINFORCE class: implements an agent using the REINFORCE algorithm.
 class REINFORCE(nn.Module):
     def __init__(self, gamma = 0.99, num_actions = 2):
         super(REINFORCE, self).__init__()
@@ -60,7 +62,8 @@ class REINFORCE(nn.Module):
             action = torch.argmax(probs)
         self.saved_log_probs.append(m.log_prob(action))
         return action.item()
-
+    
+    # Update parameters of the network and flush out rewards.
     def finish_episode(self, optimizer):
         R = 0
         self_loss = []
@@ -82,6 +85,7 @@ class REINFORCE(nn.Module):
         del self.rewards[:]
         del self.saved_log_probs[:]
 
+# RandomAgent class: implements an agent using a completely random policy.
 class RandomAgent():
     def __init__(self, num_actions = 2):
         self.rewards = []
@@ -96,6 +100,7 @@ class RandomAgent():
     def finish_episode(self, optimizer):
         del self.rewards[:]
 
+# Training loop: trains over Imeta iterations of I inner iterations.
 def train(advisor,
         advisor_optimizer = None,
         Imeta = 500,
@@ -117,12 +122,14 @@ def train(advisor,
         print(time.time() - start)
         eps = 0.8 / 0.995
 
+        # Reset and randomize environment.
         env = randomize_environment(gym.make('CartPole-v1'))
         exploiter = REINFORCE()
         exploiter_optimizer = optim.Adam(exploiter.parameters(),
                 lr=exploiter_learning_rate)
         reward_sum = 0
 
+        # Save returns for plotting.
         if return_all:
             all_returns.append([])
 
