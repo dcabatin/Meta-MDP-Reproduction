@@ -24,6 +24,8 @@ def set_environmental_variables(env, length = 0.5, masspole = 0.5, \
     env.masspole = masspole
     env.masscart = masscart
     env.force_mag = force_mag
+    env.total_mass = (env.masspole + env.masscart)
+    env.polemass_length = (env.masspole * env.length)
 
 # Change the parameters of the environment to be within a random range.
 def randomize_environment(env, lower = 0.9, upper = 1.0/0.9):
